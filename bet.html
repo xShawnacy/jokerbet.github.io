@@ -1,1 +1,29 @@
-<h1>Placer un pari</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Parier</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>📩 Placer un pari</h2>
+
+<form action="" method="POST" id="betForm">
+  Nom RP <input name="entry.111"><br>
+  Résultat
+  <select name="entry.222">
+    <option>Victoire A</option>
+    <option>Nul</option>
+    <option>Victoire B</option>
+  </select><br>
+  Mise <input name="entry.333"><br>
+  <button>Envoyer</button>
+</form>
+
+<script src="config.js"></script>
+<script>
+document.getElementById("betForm").action = CONFIG.PARIS_FORM_URL;
+</script>
+
+</body>
+</html>
