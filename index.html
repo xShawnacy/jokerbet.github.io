@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Joker Bet</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Joker Bet – Cotes Live</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>📊 Cotes en direct</h1>
-<p class="subtitle">Cotes mises à jour en direct</p>
-
 <div id="cotes"></div>
-<audio id="tickSound" src="tick.mp3" preload="auto"></audio>
-  
+
+<audio id="tickSound" preload="auto"></audio>
+
 <script src="config.js"></script>
 <script>
 let lastCotes = [];
@@ -21,7 +20,7 @@ let firstLoad = true;
 async function loadCotes(){
 
   const query = `
-    SELECT A, E, H
+    SELECT A, E, F
     WHERE A IS NOT NULL
     LIMIT 3
   `;
@@ -39,29 +38,23 @@ async function loadCotes(){
   rows.forEach((r, i) => {
 
     const cote = r.c[1]?.v;
-    const eventOpen = r.c[2]?.v !== "FERME";
+    const status = r.c[2]?.v;
 
-    if (!eventOpen) return;
+    if (status === "FERME") return;
 
     const coteAffiche = cote ? cote.toFixed(2) : "—";
 
     let anim = "";
     let arrow = "";
 
-    if (!firstLoad && lastCotes[i] !== undefined && cote !== undefined){
+    if (!firstLoad && lastCotes[i] !== undefined && cote !== undefined) {
       const diff = cote - lastCotes[i];
 
-      if (diff > 0){
-        anim = "cote-up";
-        arrow = "▲";
-      }
-      if (diff < 0){
-        anim = "cote-down";
-        arrow = "▼";
-      }
-      if (Math.abs(diff) >= 0.5){
+      if (diff > 0) { anim = "cote-up"; arrow = "▲"; }
+      if (diff < 0) { anim = "cote-down"; arrow = "▼"; }
+
+      if (Math.abs(diff) >= 0.5) {
         anim += " cote-big";
-        document.getElementById("tickSound")?.play();
       }
     }
 
@@ -88,7 +81,6 @@ async function loadCotes(){
 loadCotes();
 setInterval(loadCotes, 5000);
 </script>
-
 
 </body>
 </html>
