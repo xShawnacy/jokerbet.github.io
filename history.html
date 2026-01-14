@@ -1,15 +1,54 @@
-<h1>📊 Résultats précédents</h1>
-<table id="hist"></table>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Historique des paris</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>📜 Historique public</h1>
+<div id="history"></div>
 
 <script src="config.js"></script>
 <script>
-fetch(CONFIG.HISTORY_URL).then(r=>r.text()).then(t=>{
- let rows=t.split("\n");
- let html="<tr><th>Event</th><th>Résultat</th></tr>";
- rows.slice(1).forEach(r=>{
-  let c=r.split(",");
-  html+=`<tr><td>${c[0]}</td><td>${c[1]}</td></tr>`;
- });
- document.getElementById("hist").innerHTML=html;
-});
+async function loadHistory(){
+
+  const query = `
+    SELECT A,B,C,D,E,F
+    ORDER BY A DESC
+    LIMIT 20
+  `;
+
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=HISTORIQUE&tq=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url);
+  const text = await res.text();
+  const json = JSON.parse(text.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  let html = "";
+
+  rows.forEach(r => {
+    html += `
+      <div class="card fade-in">
+        <h3>${r.c[1].v}</h3>
+        <p>📅 ${r.c[0].v}</p>
+        <p>Résultat : <b>${r.c[2].v}</b></p>
+        <p>
+          A: ${r.c[3].v} |
+          N: ${r.c[4].v} |
+          B: ${r.c[5].v}
+        </p>
+      </div>
+    `;
+  });
+
+  document.getElementById("history").innerHTML = html;
+}
+
+loadHistory();
 </script>
+
+</body>
+</html>
