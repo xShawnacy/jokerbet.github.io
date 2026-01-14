@@ -1,1 +1,10 @@
-<h1>Admin</h1>
+<script src="config.js"></script>
+<script>
+const pass = prompt("Mot de passe admin");
+if (pass !== CONFIG.ADMIN_PASSWORD) {
+  document.body.innerHTML = "Accès refusé";
+}
+</script>
+
+<h1>ADMIN BOOKMAKER</h1>
+<iframe src="URL_GOOGLE_SHEET" width="100%" height="600"></iframe>
