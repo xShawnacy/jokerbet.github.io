@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joker Bet</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🎲 Joker Bet</h1>
+<p class="subtitle">Cotes mises à jour en direct</p>
+<div id="cotes"></div>
+
 <script src="config.js"></script>
 <script>
 async function loadCotes() {
@@ -25,3 +38,6 @@ async function loadCotes() {
 setInterval(loadCotes, 4000);
 loadCotes();
 </script>
+
+</body>
+</html>
