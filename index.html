@@ -14,30 +14,43 @@
 <script src="config.js"></script>
 <script>
 async function loadCotes() {
-  const res = await fetch(CONFIG.AUTO_COTES_URL);
-  const text = await res.text();
-  const rows = text.trim().split("\n").slice(1,4);
 
+  const query = `
+    SELECT A, E
+    WHERE A IS NOT NULL
+    LIMIT 3
+  `;
+
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=${CONFIG.SHEET_NAME}&tq=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url);
+  const text = await res.text();
+
+  const json = JSON.parse(text.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  const labels = ["Victoire A", "Nul", "Victoire B"];
   let html = "";
 
-  rows.forEach(r => {
-    const c = r.split(",");
-    const cote = parseFloat((c[4] || "").replace(",", "."));
-    const coteAffiche = isNaN(cote) ? "—" : cote.toFixed(2);
+  rows.forEach((r, i) => {
+    const cote = r.c[1]?.v;
+    const coteAffiche = cote ? cote.toFixed(2) : "—";
 
     html += `
       <div class="card">
-        <h3>${c[0]}</h3>
+        <h3>${labels[i]}</h3>
         <p>Cote : <b>${coteAffiche}</b></p>
-      </div>`;
+      </div>
+    `;
   });
 
   document.getElementById("cotes").innerHTML = html;
 }
 
-setInterval(loadCotes, 4000);
+setInterval(loadCotes, 3000);
 loadCotes();
 </script>
+
 
 </body>
 </html>
