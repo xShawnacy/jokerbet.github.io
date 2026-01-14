@@ -7,19 +7,21 @@
 </head>
 <body>
 
-<h1>🎲 Joker Bet</h1>
+<h1>📊 Cotes en direct</h1>
 <p class="subtitle">Cotes mises à jour en direct</p>
 
 <div id="cotes"></div>
-
+<audio id="tickSound" src="tick.mp3" preload="auto"></audio>
+  
 <script src="config.js"></script>
 <script>
 let lastCotes = [];
+let firstLoad = true;
 
-async function loadCotes() {
+async function loadCotes(){
 
   const query = `
-    SELECT A, E
+    SELECT A, E, F
     WHERE A IS NOT NULL
     LIMIT 3
   `;
@@ -35,14 +37,32 @@ async function loadCotes() {
   let html = "";
 
   rows.forEach((r, i) => {
+
     const cote = r.c[1]?.v;
+    const eventOpen = r.c[2]?.v !== "FERME";
+
+    if (!eventOpen) return;
+
     const coteAffiche = cote ? cote.toFixed(2) : "—";
 
-    let animClass = "";
+    let anim = "";
+    let arrow = "";
 
-    if (lastCotes[i] !== undefined && cote !== undefined) {
-      if (cote > lastCotes[i]) animClass = "cote-up";
-      if (cote < lastCotes[i]) animClass = "cote-down";
+    if (!firstLoad && lastCotes[i] !== undefined && cote !== undefined){
+      const diff = cote - lastCotes[i];
+
+      if (diff > 0){
+        anim = "cote-up";
+        arrow = "▲";
+      }
+      if (diff < 0){
+        anim = "cote-down";
+        arrow = "▼";
+      }
+      if (Math.abs(diff) >= 0.5){
+        anim += " cote-big";
+        document.getElementById("tickSound")?.play();
+      }
     }
 
     html += `
@@ -50,7 +70,10 @@ async function loadCotes() {
         <h3>${labels[i]}</h3>
         <p>
           Cote :
-          <span class="cote ${animClass}">${coteAffiche}</span>
+          <span class="cote ${anim}">
+            ${coteAffiche}
+            <span class="arrow">${arrow}</span>
+          </span>
         </p>
       </div>
     `;
@@ -59,11 +82,13 @@ async function loadCotes() {
   });
 
   document.getElementById("cotes").innerHTML = html;
+  firstLoad = false;
 }
 
 loadCotes();
 setInterval(loadCotes, 5000);
 </script>
+
 
 </body>
 </html>
