@@ -17,7 +17,8 @@
 
 <script src="config.js"></script>
 <script>
-async function loadCotes() {
+async function document.getElementById("refreshBtn").innerText = "⏳ Mise à jour...";
+loadCotes() {
 
   const query = `
     SELECT A, E
@@ -47,7 +48,7 @@ async function loadCotes() {
       </div>
     `;
   });
-
+  document.getElementById("refreshBtn").innerText = "🔄 Rafraîchir les cotes";
   document.getElementById("cotes").innerHTML = html;
 }
 
