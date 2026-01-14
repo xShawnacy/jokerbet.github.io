@@ -1,35 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Joker Bet</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<h1>🎲 Joker Bet – Paris Sportifs</h1>
-<div id="cotes"></div>
-
 <script src="config.js"></script>
 <script>
 async function loadCotes() {
   const res = await fetch(CONFIG.AUTO_COTES_URL);
   const text = await res.text();
-  const rows = text.split("\n").slice(1,4);
+  const rows = text.trim().split("\n").slice(1,4);
 
   let html = "";
+
   rows.forEach(r => {
     const c = r.split(",");
+    const cote = parseFloat((c[4] || "").replace(",", "."));
+    const coteAffiche = isNaN(cote) ? "—" : cote.toFixed(2);
+
     html += `
       <div class="card">
         <h3>${c[0]}</h3>
-        <p>Cote : <b>${Number(c[4]).toFixed(2)}</b></p>
+        <p>Cote : <b>${coteAffiche}</b></p>
       </div>`;
   });
+
   document.getElementById("cotes").innerHTML = html;
 }
 
-setInterval(loadCotes, 5000);
+setInterval(loadCotes, 4000);
 loadCotes();
 </script>
-</body>
-</html>
