@@ -1,20 +1,52 @@
-body{font-family:Arial;background:#111;color:#fff;padding:20px}
-.card{background:#1f4e78;padding:15px;margin:10px;border-radius:10px}
-button{padding:10px;border-radius:6px}
-@media(max-width:600px){body{font-size:18px}}
-
-.cote {
-  font-size: 22px;
-  font-weight: bold;
-  transition: background-color 0.6s ease;
-  padding: 4px 8px;
-  border-radius: 6px;
+body{
+  font-family:Arial;
+  background:#111;
+  color:#fff;
+  padding:20px;
 }
 
-.cote-up {
-  background-color: rgba(46, 204, 113, 0.6);
+.card{
+  background:#1f4e78;
+  padding:15px;
+  margin:12px 0;
+  border-radius:12px;
+  box-shadow:0 0 8px rgba(0,0,0,0.4);
 }
 
-.cote-down {
-  background-color: rgba(231, 76, 60, 0.6);
+.cote{
+  font-size:24px;
+  font-weight:bold;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:background-color 0.6s ease, transform 0.4s ease;
+}
+
+.cote-up{
+  background:rgba(46,204,113,0.7);
+  transform:scale(1.05);
+}
+
+.cote-down{
+  background:rgba(231,76,60,0.7);
+  transform:scale(0.95);
+}
+
+.cote-big{
+  animation:flash 0.8s infinite alternate;
+}
+
+@keyframes flash{
+  from{box-shadow:0 0 6px #f1c40f}
+  to{box-shadow:0 0 16px #f1c40f}
+}
+
+.arrow{
+  font-size:18px;
+}
+
+@media(max-width:600px){
+  .cote{font-size:20px}
 }
