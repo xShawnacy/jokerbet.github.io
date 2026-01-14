@@ -14,7 +14,83 @@
 
 <script>
 async function loadCotes() {
-  const res = await fetch("URL_DE_TA_FEUILLE_AUTO_COTES");
+  const res = await fetch("<!DOCTYPE html>
+<html>
+<head>
+  <title>Joker Bet</title>
+  <style>
+    body { font-family: Arial; background:#111; color:white; }
+    .match { background:#1f4e78; padding:15px; margin:10px; border-radius:8px; }
+  </style>
+</head>
+<body>
+
+<h1>🎲 Joker Bet – Cotes en direct</h1>
+<div id="cotes"></div>
+
+<script>
+async function loadCotes() {
+  const res = await fetch("<!DOCTYPE html>
+<html>
+<head>
+  <title>Joker Bet</title>
+  <style>
+    body { font-family: Arial; background:#111; color:white; }
+    .match { background:#1f4e78; padding:15px; margin:10px; border-radius:8px; }
+  </style>
+</head>
+<body>
+
+<h1>🎲 Joker Bet – Cotes en direct</h1>
+<div id="cotes"></div>
+
+<script>
+async function loadCotes() {
+  const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTAbDtfK4pEAlfBlo6JrSA5dcGV35C1oEF37DUUF-oP6n5dk81yGmNuPnKYxhBGsg/pub?gid=111010267&single=true&output=csv");
+  const text = await res.text();
+  const rows = text.split("\n");
+
+  let html = "";
+  rows.slice(1,4).forEach(r => {
+    const c = r.split(",");
+    html += `<div class="match">
+      <b>${c[0]}</b><br>
+      Cote : ${c[4]}
+    </div>`;
+  });
+
+  document.getElementById("cotes").innerHTML = html;
+}
+
+setInterval(loadCotes, 5000);
+loadCotes();
+</script>
+
+</body>
+</html>
+");
+  const text = await res.text();
+  const rows = text.split("\n");
+
+  let html = "";
+  rows.slice(1,4).forEach(r => {
+    const c = r.split(",");
+    html += `<div class="match">
+      <b>${c[0]}</b><br>
+      Cote : ${c[4]}
+    </div>`;
+  });
+
+  document.getElementById("cotes").innerHTML = html;
+}
+
+setInterval(loadCotes, 5000);
+loadCotes();
+</script>
+
+</body>
+</html>
+");
   const text = await res.text();
   const rows = text.split("\n");
 
