@@ -1,1 +1,15 @@
-<h1>Historique public</h1>
+<h1>📊 Résultats précédents</h1>
+<table id="hist"></table>
+
+<script src="config.js"></script>
+<script>
+fetch(CONFIG.HISTORY_URL).then(r=>r.text()).then(t=>{
+ let rows=t.split("\n");
+ let html="<tr><th>Event</th><th>Résultat</th></tr>";
+ rows.slice(1).forEach(r=>{
+  let c=r.split(",");
+  html+=`<tr><td>${c[0]}</td><td>${c[1]}</td></tr>`;
+ });
+ document.getElementById("hist").innerHTML=html;
+});
+</script>
