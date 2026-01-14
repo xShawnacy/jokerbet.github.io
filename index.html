@@ -9,15 +9,13 @@
 
 <h1>🎲 Joker Bet</h1>
 <p class="subtitle">Cotes mises à jour en direct</p>
-  <center></center><button id="refreshBtn" onclick="loadCotes()">
-  🔄 Rafraîchir les cotes
-</button></center>
 
 <div id="cotes"></div>
 
 <script src="config.js"></script>
 <script>
-document.getElementById("refreshBtn").innerText = "⏳ Mise à jour...";
+let lastCotes = [];
+
 async function loadCotes() {
 
   const query = `
@@ -30,7 +28,6 @@ async function loadCotes() {
 
   const res = await fetch(url);
   const text = await res.text();
-
   const json = JSON.parse(text.substr(47).slice(0, -2));
   const rows = json.table.rows;
 
@@ -41,21 +38,32 @@ async function loadCotes() {
     const cote = r.c[1]?.v;
     const coteAffiche = cote ? cote.toFixed(2) : "—";
 
+    let animClass = "";
+
+    if (lastCotes[i] !== undefined && cote !== undefined) {
+      if (cote > lastCotes[i]) animClass = "cote-up";
+      if (cote < lastCotes[i]) animClass = "cote-down";
+    }
+
     html += `
       <div class="card">
         <h3>${labels[i]}</h3>
-        <p>Cote : <b>${coteAffiche}</b></p>
+        <p>
+          Cote :
+          <span class="cote ${animClass}">${coteAffiche}</span>
+        </p>
       </div>
     `;
+
+    lastCotes[i] = cote;
   });
-  document.getElementById("refreshBtn").innerText = "🔄 Rafraîchir les cotes";
+
   document.getElementById("cotes").innerHTML = html;
 }
 
-setInterval(loadCotes, 3000);
 loadCotes();
+setInterval(loadCotes, 5000);
 </script>
-
 
 </body>
 </html>
