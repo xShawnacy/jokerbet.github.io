@@ -29,6 +29,33 @@ function login(){
 
 async function loadAdmin(){
 
+// --- EXPOSITION LIVE ---
+const expoQuery = `
+  SELECT D, SUM(E), SUM(F)
+  GROUP BY D
+`;
+
+const expoUrl = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=PARIS&tq=${encodeURIComponent(expoQuery)}`;
+
+const expoRes = await fetch(expoUrl);
+const expoText = await expoRes.text();
+const expoJson = JSON.parse(expoText.substr(47).slice(0, -2));
+const expoRows = expoJson.table.rows;
+
+html += "<h2>📉 Exposition Live</h2>";
+
+expoRows.forEach(r=>{
+  html += `
+    <div class="card">
+      <b>${r.c[0].v}</b><br>
+      Total misé : ${r.c[1].v}$<br>
+      Exposition max : <b>${r.c[2].v}$</b>
+    </div>
+  `;
+});
+
+
+  
   const query = `
     SELECT B, SUM(E), SUM(F)
     GROUP BY B
