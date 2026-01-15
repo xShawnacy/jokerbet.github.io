@@ -82,6 +82,40 @@ async function loadCotes(){
 
 loadCotes();
 setInterval(loadCotes, 5000);
+async function loadTop(){
+
+  const query = `
+    SELECT B, SUM(E)
+    GROUP BY B
+    ORDER BY SUM(E) DESC
+    LIMIT 5
+  `;
+
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=PARIS&tq=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url);
+  const text = await res.text();
+  const json = JSON.parse(text.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  let html = "";
+
+  rows.forEach((r,i)=>{
+    html += `
+      <div class="card">
+        🏅 #${i+1} <b>${r.c[0].v}</b><br>
+        Total misé : ${r.c[1].v}$
+      </div>
+    `;
+  });
+
+  document.getElementById("top").innerHTML = html;
+}
+
+loadTop();
+setInterval(loadTop, 10000);
+
+  
 </script>
 
 </body>
