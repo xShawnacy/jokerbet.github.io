@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Top Parieurs – Joker Bet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🏆 Top Parieurs</h1>
+<div id="top"></div>
+
+<script src="config.js"></script>
+<script>
+async function loadTop(){
+
+  const query = `
+    SELECT B, SUM(E)
+    GROUP BY B
+    ORDER BY SUM(E) DESC
+    LIMIT 10
+  `;
+
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=PARIS&tq=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url);
+  const text = await res.text();
+  const json = JSON.parse(text.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  let html = "";
+
+  rows.forEach((r,i)=>{
+    html += `
+      <div class="card">
+        🥇 #${i+1} <b>${r.c[0].v}</b><br>
+        Total misé : ${r.c[1].v}$
+      </div>
+    `;
+  });
+
+  document.getElementById("top").innerHTML = html;
+}
+
+loadTop();
+</script>
+
+</body>
+</html>
